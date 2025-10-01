@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{c1ce85cd-1b9c-4ba5-8a58-1bf5ec933f7c}">
+		<property name="assetPath">
+			<value>Wood4.ogg</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.55791383219954649</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{a21b40c8-d46f-49f5-ab6c-ed020edd108b}</destination>
+		</relationship>
+	</object>
+</objects>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{b0241f4e-0849-4a71-9b15-a3e154290dd3}">
+		<property name="assetPath">
+			<value>Abyss.ogg</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>56.629047619047618</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{a21b40c8-d46f-49f5-ab6c-ed020edd108b}</destination>
+		</relationship>
+	</object>
+</objects>

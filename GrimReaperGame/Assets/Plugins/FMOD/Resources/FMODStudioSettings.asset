@@ -463,8 +463,8 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: ../Jamsepticeye/Jamsepticeye.fspro
-  sourceBankPath: ../Jamsepticeye/Build
+  sourceProjectPath: ../JamsepticeyeFMOD/JamsepticeyeFMOD.fspro
+  sourceBankPath: ../JamsepticeyeFMOD/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
@@ -488,7 +488,10 @@ MonoBehaviour:
   Plugins: []
   MasterBanks:
   - Master
-  Banks: []
+  Banks:
+  - Ambience
+  - Music
+  - SFX
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
