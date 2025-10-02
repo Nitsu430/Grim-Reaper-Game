@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 public class PlayerInteraction : MonoBehaviour
@@ -12,8 +12,7 @@ public class PlayerInteraction : MonoBehaviour
     public UnityEngine.InputSystem.InputActionReference interactAction; // E
     public UnityEngine.InputSystem.InputActionReference cancelAction;   // Escape
 
-     [Header("Dialogue")]
-    public DialogueSystem.DialoguePlayer dialoguePlayer;
+
 
     [Header("Behavior")]
     public bool requireFocusToInteract = true; // <- set true to require look-at
@@ -77,6 +76,17 @@ public class PlayerInteraction : MonoBehaviour
     public void FreezePlayer(bool freeze, bool unlockCursor = true)
     {
         if (movementToDisable) movementToDisable.enabled = !freeze;
+
+        // 🔹 Stop momentum when freezing
+        if (freeze && movementToDisable)
+        {
+            if (movementToDisable.TryGetComponent<Rigidbody>(out var rb))
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+        }
+
         if (unlockCursor)
         {
             var fp = movementToDisable as FirstPersonRigidbodyController_WithFootsteps;
@@ -84,6 +94,7 @@ public class PlayerInteraction : MonoBehaviour
             else { Cursor.lockState = freeze ? CursorLockMode.None : CursorLockMode.Locked; Cursor.visible = freeze; }
         }
     }
+
 
     public void ClearActive(IInteractable i)
     {

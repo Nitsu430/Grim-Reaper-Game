@@ -22,8 +22,12 @@ public class InspectableInteractable : InteractableBase
     public UnityEngine.InputSystem.InputActionReference dragHoldAction;  // Button
     public float rotationSpeed = 120f; // degrees/sec at delta=1
 
+    [Header("Dialogue")]
+    public DialogueSystem.DialoguePlayer dialoguePlayer;
+
     // internal state
     Transform originalParent;
+    bool dialogueStarted = false;
     Vector3 originalPos; Quaternion originalRot; Vector3 originalScale;
     Transform rig; // moves/rotates separately from item
     Camera cam;
@@ -88,13 +92,20 @@ public class InspectableInteractable : InteractableBase
             rotating = true;
 
             // 🔹 Trigger the player's DialoguePlayer (it already has the Sequence)
-            if (player.dialoguePlayer) player.dialoguePlayer.Trigger();
+            if (dialoguePlayer) { dialoguePlayer.Trigger(); dialogueStarted = true; }
         }));
     }
 
     public override void EndInteract(PlayerInteraction player)
     {
         if (!inUse) return;
+
+        if (dialogueStarted && dialoguePlayer)
+        {
+            dialoguePlayer.Stop();
+            dialogueStarted = false;
+        }
+
         rotating = false;
         StartCoroutine(ReturnToWorld(player));
     }

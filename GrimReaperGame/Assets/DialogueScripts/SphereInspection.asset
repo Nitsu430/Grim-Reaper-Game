@@ -15,7 +15,7 @@ MonoBehaviour:
   lines:
   - speakerKey: 
     speakerName: ' '
-    text: This is a sphere.
+    text: This is not a sphere.
     useTypewriter: 1
     charsPerSecond: 15
     doesTriggerDecision: 0
@@ -28,10 +28,10 @@ MonoBehaviour:
       Path: 
     blipEvent:
       Guid:
-        Data1: 1929436604
-        Data2: 1318923483
-        Data3: -81653592
-        Data4: 1287625574
-      Path: event:/TextboxBlipOpen
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
   autoAdvanceDelay: 0
   sequenceId: e71b4feb-48a1-439e-93d3-e857bd31f753

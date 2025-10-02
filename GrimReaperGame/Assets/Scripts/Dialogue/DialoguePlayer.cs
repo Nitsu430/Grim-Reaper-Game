@@ -1,12 +1,8 @@
-using DialogueSystem;
-using FMOD;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-
-
 
 namespace DialogueSystem
 {
@@ -16,24 +12,29 @@ namespace DialogueSystem
     {
         [Header("Playback Source")]
         public DialogueSequenceSO sequence;     // Assign per instance
-        public bool playOnStart = false;        // Optional auto trigger
+        public bool playOnStart = false;
 
         [Header("Scene Refs")]
-        public Camera playerCamera;             // Usually main camera (first-person)
-        public Canvas overlayCanvas;            // Screen-space canvas hosting UI
+        public Camera playerCamera;             // Usually Main Camera
+        public Canvas overlayCanvas;            // Shared screen-space canvas
 
-        [Header("UI Prefabs/Refs")]
+        [Header("UI Prefabs/Refs (instanced per player)")]
         public TrackedBubbleUI trackedBubblePrefab;
-        public OmniBubbleUI omniUI;             // narrator panel (assign existing)
-        public DecisionPanelUI decisionUI;      // decision panel (assign existing)
+        public OmniBubbleUI omniPrefab;
+        public DecisionPanelUI decisionPrefab;
+
+        // Runtime instances owned by THIS player
+        private TrackedBubbleUI _bubble;
+        private OmniBubbleUI _omni;
+        private DecisionPanelUI _decision;
 
         [Header("Gameplay Freeze on Decision")]
         [Tooltip("Player movement script to disable while a decision is up.")]
         public MonoBehaviour movementToDisable; // e.g., FirstPersonRigidbodyController_WithFootsteps
-        public bool unlockCursorDuringDecision = true;      // decision panel (assign existing)
+        public bool unlockCursorDuringDecision = true;
 
         [Header("Input (New Input System)")]
-        [Tooltip("Advance to next or complete typewriter when performed.")]
+        [Tooltip("Advance/complete line. Also used to OPEN the decision when pending.")]
         public UnityEngine.InputSystem.InputActionReference advanceAction;
         [Tooltip("Optional: perform to call Trigger() and start this player's sequence.")]
         public UnityEngine.InputSystem.InputActionReference triggerAction;
@@ -44,38 +45,55 @@ namespace DialogueSystem
         [Tooltip("(sequenceId, takeLife) emitted when the player makes a decision.")]
         public StringBoolEvent OnDecision;
 
+        // State
         private DialogueSequenceSO _active;
         private int _index;
         private bool _isTyping;
         private bool _awaitingDecision;
 
-        private Dictionary<string, SpeakerSource> _speakers = new();
-        private TrackedBubbleUI _bubble;
+        // “Press Interact again to show decision” support
+        private bool _pendingDecision;
+        private DialogueLine _pendingDecisionLine;
+
+        private readonly Dictionary<string, SpeakerSource> _speakers = new();
+        private SpeakerSource _currentSpeakerSource;
 
         // Typewriter state
         private TMP_Text _currentTMP;
         private string _fullText;
         private float _cps;
-        private FMODUnity.EventReference _blipEventRef;
-
-        private SpeakerSource _currentSpeakerSource;
-
-
 
         void Awake()
         {
             if (!playerCamera) playerCamera = Camera.main;
             CacheSpeakers();
 
+            if (overlayCanvas == null)
+            {
+                Debug.LogError("DialoguePlayer: overlayCanvas not assigned.");
+                enabled = false; return;
+            }
+
+            // Create our own UI instances so multiple players don’t collide
             if (trackedBubblePrefab)
             {
                 _bubble = Instantiate(trackedBubblePrefab, overlayCanvas.transform);
                 _bubble.Initialize(overlayCanvas, playerCamera);
                 _bubble.SetVisible(false);
+                _bubble.transform.SetAsFirstSibling(); // keep behind other panels
             }
 
-            if (omniUI) omniUI.SetVisible(false);
-            if (decisionUI) decisionUI.Hide();
+            if (omniPrefab)
+            {
+                _omni = Instantiate(omniPrefab, overlayCanvas.transform);
+                _omni.SetVisible(false);
+            }
+
+            if (decisionPrefab)
+            {
+                _decision = Instantiate(decisionPrefab, overlayCanvas.transform);
+                _decision.Hide();
+            }
         }
 
         void Start()
@@ -85,36 +103,55 @@ namespace DialogueSystem
 
         void OnEnable()
         {
+#if ENABLE_INPUT_SYSTEM
             if (advanceAction && advanceAction.action != null)
-            {
-                advanceAction.action.Enable();
-                advanceAction.action.performed += OnAdvancePerformed;
-            }
+            { advanceAction.action.Enable(); advanceAction.action.performed += OnAdvancePerformed; }
             if (triggerAction && triggerAction.action != null)
-            {
-                triggerAction.action.Enable();
-                triggerAction.action.performed += OnTriggerPerformed;
-            }
+            { triggerAction.action.Enable(); triggerAction.action.performed += OnTriggerPerformed; }
+#endif
         }
 
         void OnDisable()
         {
+#if ENABLE_INPUT_SYSTEM
             if (advanceAction && advanceAction.action != null)
-            {
-                advanceAction.action.performed -= OnAdvancePerformed;
-                advanceAction.action.Disable();
-            }
+            { advanceAction.action.performed -= OnAdvancePerformed; advanceAction.action.Disable(); }
             if (triggerAction && triggerAction.action != null)
-            {
-                triggerAction.action.performed -= OnTriggerPerformed;
-                triggerAction.action.Disable();
-            }
+            { triggerAction.action.performed -= OnTriggerPerformed; triggerAction.action.Disable(); }
+#endif
         }
 
         private void OnAdvancePerformed(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
         {
-            if (_active == null || _awaitingDecision) return;
-            if (_isTyping) SkipTypewriter(); else NextLine();
+            if (_active == null) return;
+
+            // If a decision is pending, this press opens the panel
+            if (_pendingDecision && _decision != null)
+            {
+                _pendingDecision = false;
+                _awaitingDecision = true;
+
+                if (_bubble) _bubble.transform.SetAsFirstSibling(); // keep behind panel
+                _decision.OnChoice.RemoveListener(OnDecisionInternal);
+                _decision.OnChoice.AddListener(OnDecisionInternal);
+                _decision.Show("Make your choice.");
+
+                // Freeze gameplay input + cursor
+                if (movementToDisable) movementToDisable.enabled = false;
+                if (unlockCursorDuringDecision)
+                {
+                    var fp = movementToDisable as FirstPersonRigidbodyController_WithFootsteps;
+                    if (fp) fp.SetCursorLocked(false);
+                    else { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
+                }
+                return;
+            }
+
+            // If decision panel is up, ignore advance
+            if (_awaitingDecision) return;
+
+            if (_isTyping) SkipTypewriter();
+            else NextLine();
         }
 
         private void OnTriggerPerformed(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -123,16 +160,15 @@ namespace DialogueSystem
         }
 
         // Public API: called by other scripts (e.g., trigger volumes)
-        public void Trigger()
-        {
-            Play(sequence);
-        }
+        public void Trigger() => Play(sequence);
 
         public void Play(DialogueSequenceSO seq)
         {
             if (seq == null) return;
             _active = seq;
             _index = -1;
+            _pendingDecision = false;
+            _awaitingDecision = false;
             OnSequenceStart?.Invoke();
             NextLine();
         }
@@ -143,15 +179,16 @@ namespace DialogueSystem
             _active = null;
             _isTyping = false;
             _awaitingDecision = false;
-            HideAllUI();
+            _pendingDecision = false;
+            HideAllUI();                 // only hides THIS player's UI
             OnSequenceEnd?.Invoke();
         }
 
         private void HideAllUI()
         {
             if (_bubble) _bubble.SetVisible(false);
-            if (omniUI) omniUI.SetVisible(false);
-            if (decisionUI) decisionUI.Hide();
+            if (_omni) _omni.SetVisible(false);
+            if (_decision) _decision.Hide();
         }
 
         private void NextLine()
@@ -166,59 +203,53 @@ namespace DialogueSystem
 
         private void ShowLine(DialogueLine line)
         {
-            StopAnyAudio();
             StopAllCoroutines();
             _isTyping = false;
             _awaitingDecision = false;
-            HideAllUI();
+            _pendingDecision = false;
+            _pendingDecisionLine = null;
             _currentTMP = null;
             _currentSpeakerSource = null;
+            HideAllUI();
 
-            SpeakerSource speaker = null; // initialize to satisfy definite assignment in older C# compilers
-            bool hasSpeaker = !string.IsNullOrWhiteSpace(line.speakerKey) && _speakers.TryGetValue(line.speakerKey, out speaker);
+            SpeakerSource speaker = null;
+            bool hasSpeaker = !string.IsNullOrWhiteSpace(line.speakerKey) &&
+                              _speakers.TryGetValue(line.speakerKey, out speaker);
 
-            if (hasSpeaker)
+            if (hasSpeaker && _bubble)
             {
                 _currentSpeakerSource = speaker;
-                if (_bubble)
-                {
-                    _bubble.SetVisible(true);
-                    _bubble.SetTarget(speaker.transform, speaker.worldOffset);
-                    _bubble.SetContent(line.speakerName, "");
-                    _currentTMP = _bubble.bodyText;
-                }
+                _bubble.SetVisible(true);
+                _bubble.SetTarget(speaker.transform, speaker.worldOffset);
+                _bubble.SetContent(line.speakerName, "");
+                _currentTMP = _bubble.bodyText;
             }
-            else
+            else if (_omni)
             {
-                // Omniscient narrator / no speaker source
-                if (omniUI)
-                {
-                    omniUI.SetVisible(true);
-                    omniUI.SetContent(string.IsNullOrEmpty(line.speakerName) ? "" : line.speakerName, "");
-                    _currentTMP = omniUI.bodyText;
-                }
+                _omni.SetVisible(true);
+                _omni.SetContent(string.IsNullOrEmpty(line.speakerName) ? "" : line.speakerName, "");
+                _currentTMP = _omni.bodyText;
             }
 
             if (_currentTMP == null)
             {
-                UnityEngine.Debug.LogWarning("DialoguePlayer: No TMP target to render text to. Check UI assignments.");
+                Debug.LogWarning("DialoguePlayer: No TMP target to render text to. Check UI assignments.");
                 return;
             }
 
             // Typewriter start
             _fullText = line.text;
             _cps = Mathf.Max(1f, line.charsPerSecond);
-            _blipEventRef = line.blipEvent;
             StartCoroutine(TypewriterRoutine(line));
 
-            // Voice one-shot via AudioManager
+            // Voice one-shot via your AudioManager
             if (AudioManager.instance != null && !line.voiceEvent.IsNull)
             {
-                Vector3 pos = (_currentSpeakerSource != null) ? _currentSpeakerSource.AnchorPosition : playerCamera.transform.position;
+                Vector3 pos = (_currentSpeakerSource != null)
+                              ? _currentSpeakerSource.AnchorPosition
+                              : (playerCamera ? playerCamera.transform.position : transform.position);
                 AudioManager.instance.PlayOneShot(line.voiceEvent, pos);
             }
-
-
         }
 
         private IEnumerator TypewriterRoutine(DialogueLine line)
@@ -244,8 +275,6 @@ namespace DialogueSystem
             {
                 visible++;
                 _currentTMP.maxVisibleCharacters = visible;
-
-
                 yield return new WaitForSeconds(delay);
             }
 
@@ -255,23 +284,13 @@ namespace DialogueSystem
 
         private IEnumerator MaybeAutoAdvanceOrDecision(DialogueLine line)
         {
-            if (line.doesTriggerDecision && decisionUI != null)
+            if (line.doesTriggerDecision && _decision != null)
             {
-                _awaitingDecision = true;
-                _bubble.transform.SetAsFirstSibling();
-                decisionUI.OnChoice.RemoveListener(OnDecisionInternal);
-                decisionUI.OnChoice.AddListener(OnDecisionInternal);
-                decisionUI.Show($"Make your choice.");
-                // Freeze gameplay input + cursor
-                if (movementToDisable) movementToDisable.enabled = false;
-                if (unlockCursorDuringDecision)
-                {
-                    var fp = movementToDisable as FirstPersonRigidbodyController_WithFootsteps;
-                    if (fp) fp.SetCursorLocked(false); else { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
-                }
-                yield break; // Wait for user choice to continue
+                // Arm the decision; user must press Interact again to open it
+                _pendingDecision = true;
+                _pendingDecisionLine = line;
+                yield break;
             }
-
 
             if (_active != null && _active.autoAdvanceDelay > 0f)
             {
@@ -280,15 +299,14 @@ namespace DialogueSystem
             }
         }
 
-
-
         private void OnDecisionInternal(bool takeLife)
         {
             // Unfreeze gameplay
             if (unlockCursorDuringDecision)
             {
                 var fp = movementToDisable as FirstPersonRigidbodyController_WithFootsteps;
-                if (fp) fp.SetCursorLocked(true); else { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; }
+                if (fp) fp.SetCursorLocked(true);
+                else { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; }
             }
             if (movementToDisable) movementToDisable.enabled = true;
 
@@ -296,16 +314,12 @@ namespace DialogueSystem
             OnDecision?.Invoke(_active != null ? _active.sequenceId : string.Empty, takeLife);
             NextLine();
         }
-        
 
         private void SkipTypewriter()
         {
             _isTyping = false;
-            if (_currentTMP != null)
-                _currentTMP.maxVisibleCharacters = int.MaxValue;
+            if (_currentTMP != null) _currentTMP.maxVisibleCharacters = int.MaxValue;
         }
-
-        private void StopAnyAudio() { /* no persistent dialogue audio to stop when using one-shots */ }
 
         private void CacheSpeakers()
         {
@@ -318,7 +332,7 @@ namespace DialogueSystem
             }
         }
 
-        // Call this if you spawn speakers at runtime before playing
+        // Call if you spawn speakers at runtime before playing
         public void RebuildSpeakerMap() => CacheSpeakers();
     }
 }
