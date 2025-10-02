@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{4d031fe8-7315-42cc-8648-8018759fb374}">
+		<property name="assetPath">
+			<value>TestingNPC.ogg</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>1.7307709750566893</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{a21b40c8-d46f-49f5-ab6c-ed020edd108b}</destination>
+		</relationship>
+	</object>
+</objects>

@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b22a52b41e09b344ae69f447972a968, type: 3}
+  m_Name: TestSequence
+  m_EditorClassIdentifier: 
+  lines:
+  - speakerKey: Testing_1
+    speakerName: Dude
+    text: Bro I am gonna die
+    useTypewriter: 1
+    charsPerSecond: 30
+    doesTriggerDecision: 0
+    voiceEvent:
+      Guid:
+        Data1: 642443528
+        Data2: 1168370142
+        Data3: 833556107
+        Data4: 1853626117
+      Path: event:/TestingNPC1
+    blipEvent:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+  - speakerKey: Testing_2
+    speakerName: Dude 2
+    text: No way bro fr?
+    useTypewriter: 1
+    charsPerSecond: 30
+    doesTriggerDecision: 0
+    voiceEvent:
+      Guid:
+        Data1: -2058425069
+        Data2: 1250306696
+        Data3: -1306915393
+        Data4: -1923605337
+      Path: event:/TestingNPC2
+    blipEvent:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+  - speakerKey: Testing_1
+    speakerName: Dude 1
+    text: Yeah, should I die?
+    useTypewriter: 1
+    charsPerSecond: 30
+    doesTriggerDecision: 1
+    voiceEvent:
+      Guid:
+        Data1: 642443528
+        Data2: 1168370142
+        Data3: 833556107
+        Data4: 1853626117
+      Path: event:/TestingNPC1
+    blipEvent:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+  autoAdvanceDelay: 0
+  sequenceId: e71b4feb-48a1-439e-93d3-e857bd31f753

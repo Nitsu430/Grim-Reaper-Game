@@ -73,7 +73,7 @@ public class PS1PostFeature : ScriptableRendererFeature
 
         public override void OnCameraCleanup(CommandBuffer cmd)
         {
-            // RTHandle lifetime managed by renderer feature; leave it allocated
+            
         }
     }
 

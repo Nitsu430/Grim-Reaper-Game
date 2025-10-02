@@ -40,6 +40,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 19360
   Exists: 1
+--- !u!114 &-5519319851915999988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/TestingNPC1
+  m_EditorClassIdentifier: 
+  Path: event:/TestingNPC1
+  Guid:
+    Data1: 642443528
+    Data2: 1168370142
+    Data3: 833556107
+    Data4: 1853626117
+  Banks:
+  - {fileID: 7358000604088625651}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-4481829705332275503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,10 +149,10 @@ MonoBehaviour:
   Path: ../JamsepticeyeFMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638949616155662751
+  lastModified: 638950104492663547
   FileSizes:
   - Name: Desktop
-    Value: 1072
+    Value: 1262
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -148,18 +175,30 @@ MonoBehaviour:
   EditorEvents:
   - {fileID: 7706567815312407028}
   - {fileID: 8159593871876895696}
+  - {fileID: -5519319851915999988}
+  - {fileID: 6109554814547444046}
+  - {fileID: 5002488564419859233}
+  - {fileID: 8446839181704309092}
   EditorParameters: []
   MasterBanks:
   - {fileID: 2913857932886765284}
   StringsBanks:
   - {fileID: -1559987677783757235}
   cacheVersion: 131849
-  cacheTime: 638949624242546184
+  cacheTime: 638950104493075218
   SerializableEventsDict:
   - key: event:/Footsteps
     index: 0
   - key: event:/Ambience
     index: 1
+  - key: event:/TestingNPC1
+    index: 2
+  - key: event:/TestingNPC2
+    index: 3
+  - key: event:/TextboxBlipOpen
+    index: 4
+  - key: event:/TextboxBlipClose
+    index: 5
 --- !u!114 &268513262955197282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,11 +234,65 @@ MonoBehaviour:
   Path: ../JamsepticeyeFMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638949616155652842
+  lastModified: 638950104492648660
   FileSizes:
   - Name: Desktop
     Value: 1524
   Exists: 1
+--- !u!114 &5002488564419859233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/TextboxBlipOpen
+  m_EditorClassIdentifier: 
+  Path: event:/TextboxBlipOpen
+  Guid:
+    Data1: 1929436604
+    Data2: 1318923483
+    Data3: -81653592
+    Data4: 1287625574
+  Banks:
+  - {fileID: 7358000604088625651}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &6109554814547444046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/TestingNPC2
+  m_EditorClassIdentifier: 
+  Path: event:/TestingNPC2
+  Guid:
+    Data1: -2058425069
+    Data2: 1250306696
+    Data3: -1306915393
+    Data4: -1923605337
+  Banks:
+  - {fileID: 7358000604088625651}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &7358000604088625651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,10 +308,10 @@ MonoBehaviour:
   Path: ../JamsepticeyeFMOD/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638949614944020184
+  lastModified: 638950104493075218
   FileSizes:
   - Name: Desktop
-    Value: 506
+    Value: 36256
   Exists: 1
 --- !u!114 &7706567815312407028
 MonoBehaviour:
@@ -274,6 +367,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 112258
+--- !u!114 &8446839181704309092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/TextboxBlipClose
+  m_EditorClassIdentifier: 
+  Path: event:/TextboxBlipClose
+  Guid:
+    Data1: 45661400
+    Data2: 1079883094
+    Data3: 19842946
+    Data4: 871494680
+  Banks:
+  - {fileID: 7358000604088625651}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &9165880183844558520
 MonoBehaviour:
   m_ObjectHideFlags: 0
