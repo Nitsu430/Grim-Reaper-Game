@@ -12,6 +12,17 @@ public class PlayerInteraction : MonoBehaviour
     public UnityEngine.InputSystem.InputActionReference interactAction; // E
     public UnityEngine.InputSystem.InputActionReference cancelAction;   // Escape
 
+     [Header("Dialogue")]
+    public DialogueSystem.DialoguePlayer dialoguePlayer;
+
+    [Header("Behavior")]
+    public bool requireFocusToInteract = true; // <- set true to require look-at
+
+    // internal candidates
+    IInteractable triggerCandidate;
+    IInteractable focusCandidate;
+
+
     public IInteractable Candidate { get; private set; }
     public IInteractable Active { get; private set; }
 
