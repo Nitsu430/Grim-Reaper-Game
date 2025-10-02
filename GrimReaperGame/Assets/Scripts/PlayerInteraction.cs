@@ -51,6 +51,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void OnInteract(UnityEngine.InputSystem.InputAction.CallbackContext _)
     {
+        Debug.Log("Interacted");
         if (Active != null || Candidate == null || Candidate.IsInUse) return;
         Active = Candidate;
         UpdatePrompt(null);
