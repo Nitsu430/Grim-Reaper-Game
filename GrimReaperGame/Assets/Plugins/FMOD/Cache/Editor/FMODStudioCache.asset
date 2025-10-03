@@ -82,10 +82,10 @@ MonoBehaviour:
   Path: ../JamsepticeyeFMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638949614944044983
+  lastModified: 638951046472842921
   FileSizes:
   - Name: Desktop
-    Value: 506
+    Value: 1488800
   Exists: 1
 --- !u!114 &-3423724677145989036
 MonoBehaviour:
@@ -149,10 +149,10 @@ MonoBehaviour:
   Path: ../JamsepticeyeFMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638950104492663547
+  lastModified: 638951042922036734
   FileSizes:
   - Name: Desktop
-    Value: 1262
+    Value: 1298
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -179,13 +179,14 @@ MonoBehaviour:
   - {fileID: 6109554814547444046}
   - {fileID: 5002488564419859233}
   - {fileID: 8446839181704309092}
+  - {fileID: 5534821552762931057}
   EditorParameters: []
   MasterBanks:
   - {fileID: 2913857932886765284}
   StringsBanks:
   - {fileID: -1559987677783757235}
   cacheVersion: 131849
-  cacheTime: 638950104493075218
+  cacheTime: 638951046472842921
   SerializableEventsDict:
   - key: event:/Footsteps
     index: 0
@@ -199,6 +200,8 @@ MonoBehaviour:
     index: 4
   - key: event:/TextboxBlipClose
     index: 5
+  - key: event:/Music
+    index: 6
 --- !u!114 &268513262955197282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,7 +237,7 @@ MonoBehaviour:
   Path: ../JamsepticeyeFMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638950104492648660
+  lastModified: 638951042922016882
   FileSizes:
   - Name: Desktop
     Value: 1524
@@ -266,6 +269,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &5534821552762931057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music
+  m_EditorClassIdentifier: 
+  Path: event:/Music
+  Guid:
+    Data1: 1884684644
+    Data2: 1259196425
+    Data3: -481900366
+    Data4: 1429360718
+  Banks:
+  - {fileID: -4481829705332275503}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 126000
 --- !u!114 &6109554814547444046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,7 +396,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 112258
+  Length: 120000
 --- !u!114 &8446839181704309092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,8 +439,8 @@ MonoBehaviour:
   Path: ../JamsepticeyeFMOD/Build/Desktop/Ambience.bank
   Name: Ambience
   StudioPath: bank:/Ambience
-  lastModified: 638949624242546184
+  lastModified: 638951046272642626
   FileSizes:
   - Name: Desktop
-    Value: 787584
+    Value: 1022784
   Exists: 1

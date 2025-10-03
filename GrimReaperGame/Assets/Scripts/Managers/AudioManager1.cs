@@ -40,6 +40,7 @@ public class AudioManager : MonoBehaviour
         ambBus = RuntimeManager.GetBus("bus:/AmbienceBus");
 
         InitializeAmbience(ambienceReference, 0f);
+        InitializeMusic();
     }
 
     private void Update()

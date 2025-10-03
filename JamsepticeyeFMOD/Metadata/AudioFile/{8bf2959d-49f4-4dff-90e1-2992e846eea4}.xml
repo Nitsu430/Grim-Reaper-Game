@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{8bf2959d-49f4-4dff-90e1-2992e846eea4}">
+		<property name="assetPath">
+			<value>ReaperGame.ogg</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>126</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{a21b40c8-d46f-49f5-ab6c-ed020edd108b}</destination>
+		</relationship>
+	</object>
+</objects>

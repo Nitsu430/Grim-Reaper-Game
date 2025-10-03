@@ -4221,11 +4221,11 @@ MonoBehaviour:
     Path: event:/Ambience
   musicReference:
     Guid:
-      Data1: -171293266
-      Data2: 1286110518
-      Data3: -252460625
-      Data4: -494671977
-    Path: event:/Ambience
+      Data1: 1884684644
+      Data2: 1259196425
+      Data3: -481900366
+      Data4: 1429360718
+    Path: event:/Music
 --- !u!4 &1610898256
 Transform:
   m_ObjectHideFlags: 0
@@ -5866,12 +5866,12 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1610898256}
   - {fileID: 1425444077}
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1559982075}
   - {fileID: 523901043}
-  - {fileID: 1610898256}
   - {fileID: 1395851348}
   - {fileID: 1524598826}
   - {fileID: 44423846}

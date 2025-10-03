@@ -29,7 +29,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BlurRadius: 2.4980001
+    - _BlurRadius: 2.4979403
     - _ColorMask: 15
     - _Downsample: 1
     - _Iterations: 2
