@@ -35,8 +35,10 @@ namespace DialogueSystem
                 // Select a default button for keyboard/controller
                 var sel = takeLifeButton ? takeLifeButton.gameObject : (leaveAloneButton ? leaveAloneButton.gameObject : null);
                 if (sel) UnityEngine.EventSystems.EventSystem.current?.SetSelectedGameObject(sel);
+
+                blurController.TweenRadius(2.5f, 1f);   // animate in
             }
-            blurController.TweenRadius(2.5f, 1f);   // animate in
+            
         }
 
         public void Hide()

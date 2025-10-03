@@ -92,7 +92,7 @@ public class InspectableInteractable : InteractableBase
             rotating = true;
 
             // 🔹 Trigger the player's DialoguePlayer (it already has the Sequence)
-            if (dialoguePlayer) { dialoguePlayer.Trigger(); dialogueStarted = true; }
+            if (dialoguePlayer) { dialoguePlayer.Trigger(); dialogueStarted = true; Debug.Log("Dialogue Fired"); }
         }));
     }
 
@@ -100,14 +100,18 @@ public class InspectableInteractable : InteractableBase
     {
         if (!inUse) return;
 
-        if (dialogueStarted && dialoguePlayer)
+        // Keep the player frozen & cursor unlocked if ANY decision panel is up.
+        bool keepFrozenForDecision = DialogueSystem.DialoguePlayer.AnyDecisionActive;
+
+        // Only stop the dialogue we started if no decision is active
+        if (dialogueStarted && dialoguePlayer && !keepFrozenForDecision)
         {
             dialoguePlayer.Stop();
             dialogueStarted = false;
         }
 
         rotating = false;
-        StartCoroutine(ReturnToWorld(player));
+        StartCoroutine(ReturnToWorld(player, keepFrozenForDecision));
     }
 
     System.Collections.IEnumerator TweenToLocal(Vector3 tgtPos, Quaternion tgtRot, Vector3 tgtScale, float dur, System.Action onDone)
@@ -127,7 +131,7 @@ public class InspectableInteractable : InteractableBase
         onDone?.Invoke();
     }
 
-    System.Collections.IEnumerator ReturnToWorld(PlayerInteraction player)
+    System.Collections.IEnumerator ReturnToWorld(PlayerInteraction player, bool keepFrozenForDecision)
     {
         // Tween back to saved world pose
         Vector3 sPos = transform.position; Quaternion sRot = transform.rotation; Vector3 sScale = transform.localScale;
@@ -143,14 +147,23 @@ public class InspectableInteractable : InteractableBase
             yield return null;
         }
 
-        // Restore hierarchy & physics
         transform.SetParent(originalParent, worldPositionStays: true);
         var rb = GetComponent<Rigidbody>();
         if (rb) { rb.isKinematic = false; rb.detectCollisions = true; }
         foreach (var col in GetComponentsInChildren<Collider>()) col.enabled = true;
 
-        // Unfreeze player (re-lock cursor) and clear
-        if (player) { player.FreezePlayer(false, true); player.ClearActive(this); }
+        // 🔸 Player/cursor handling
+        if (player)
+        {
+            if (!keepFrozenForDecision)
+            {
+                // No decision up: re-lock cursor and re-enable movement
+                player.FreezePlayer(false, true);
+            }
+            // If a decision is active, do NOTHING: player stays frozen & cursor stays unlocked
+            player.ClearActive(this);
+        }
+
         inUse = false;
     }
 

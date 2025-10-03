@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - speakerKey: 
-    speakerName: ' '
+    speakerName: Sphere
     text: This is not a sphere.
     useTypewriter: 1
     charsPerSecond: 15

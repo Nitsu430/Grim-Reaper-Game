@@ -11,17 +11,18 @@ namespace DialogueSystem
     public class DialoguePlayer : MonoBehaviour
     {
         [Header("Playback Source")]
-        public DialogueSequenceSO sequence;     // Assign per instance
+        public DialogueSequenceSO sequence;
         public bool playOnStart = false;
 
         [Header("Scene Refs")]
-        public Camera playerCamera;             // Usually Main Camera
-        public Canvas overlayCanvas;            // Shared screen-space canvas
+        public Camera playerCamera;
+        public Canvas overlayCanvas;
 
-        [Header("UI Prefabs/Refs (instanced per player)")]
+        [Header("UI Prefabs (instanced per player)")]
         public TrackedBubbleUI trackedBubblePrefab;
         public OmniBubbleUI omniPrefab;
         public DecisionPanelUI decisionPrefab;
+        public GameObject UIRoot;
 
         // Runtime instances owned by THIS player
         private TrackedBubbleUI _bubble;
@@ -34,7 +35,7 @@ namespace DialogueSystem
         public bool unlockCursorDuringDecision = true;
 
         [Header("Input (New Input System)")]
-        [Tooltip("Advance/complete line. Also used to OPEN the decision when pending.")]
+        [Tooltip("Advance/complete line. Also opens decision when pending.")]
         public UnityEngine.InputSystem.InputActionReference advanceAction;
         [Tooltip("Optional: perform to call Trigger() and start this player's sequence.")]
         public UnityEngine.InputSystem.InputActionReference triggerAction;
@@ -45,15 +46,16 @@ namespace DialogueSystem
         [Tooltip("(sequenceId, takeLife) emitted when the player makes a decision.")]
         public StringBoolEvent OnDecision;
 
-        // State
+        // ----- State -----
         private DialogueSequenceSO _active;
-        private int _index;
+        private int _index = -1;
         private bool _isTyping;
-        private bool _awaitingDecision;
+        private bool _awaitingDecision;   // panel visible
+        private bool _pendingDecision;    // waiting for user to press Interact to open panel
 
-        // “Press Interact again to show decision” support
-        private bool _pendingDecision;
-        private DialogueLine _pendingDecisionLine;
+        // Expose for other systems (e.g., inspectable)
+        public bool IsDecisionActive => _awaitingDecision;
+        public bool IsDecisionPending => _pendingDecision;
 
         private readonly Dictionary<string, SpeakerSource> _speakers = new();
         private SpeakerSource _currentSpeakerSource;
@@ -62,37 +64,42 @@ namespace DialogueSystem
         private TMP_Text _currentTMP;
         private string _fullText;
         private float _cps;
+        private FMODUnity.EventReference _blipEventRef; // kept for future per-char blips if needed
+
+        // ==== Global decision state (class-wide) ====
+        private static int _activeDecisionCount = 0;
+        public static bool AnyDecisionActive => _activeDecisionCount > 0;
+        public static event System.Action<DialoguePlayer, bool> DecisionActiveChanged;
 
         void Awake()
         {
             if (!playerCamera) playerCamera = Camera.main;
+            if (!overlayCanvas) { Debug.LogError("DialoguePlayer: overlayCanvas not assigned."); enabled = false; return; }
+
             CacheSpeakers();
 
-            if (overlayCanvas == null)
-            {
-                Debug.LogError("DialoguePlayer: overlayCanvas not assigned.");
-                enabled = false; return;
-            }
-
-            // Create our own UI instances so multiple players don’t collide
             if (trackedBubblePrefab)
             {
                 _bubble = Instantiate(trackedBubblePrefab, overlayCanvas.transform);
                 _bubble.Initialize(overlayCanvas, playerCamera);
                 _bubble.SetVisible(false);
-                _bubble.transform.SetAsFirstSibling(); // keep behind other panels
+                _bubble.transform.SetAsFirstSibling(); // behind other UI
             }
 
             if (omniPrefab)
             {
                 _omni = Instantiate(omniPrefab, overlayCanvas.transform);
+                _omni.transform.parent = UIRoot.transform;
                 _omni.SetVisible(false);
+                _omni.transform.SetAsLastSibling();
             }
 
             if (decisionPrefab)
             {
                 _decision = Instantiate(decisionPrefab, overlayCanvas.transform);
+                _decision.transform.parent = UIRoot.transform;
                 _decision.Hide();
+                _decision.transform.SetAsLastSibling();
             }
         }
 
@@ -125,7 +132,7 @@ namespace DialogueSystem
         {
             if (_active == null) return;
 
-            // If a decision is pending, this press opens the panel
+            // OPEN decision if one is pending
             if (_pendingDecision && _decision != null)
             {
                 _pendingDecision = false;
@@ -135,6 +142,10 @@ namespace DialogueSystem
                 _decision.OnChoice.RemoveListener(OnDecisionInternal);
                 _decision.OnChoice.AddListener(OnDecisionInternal);
                 _decision.Show("Make your choice.");
+
+                // bump global counter only when panel is actually shown
+                _activeDecisionCount++;
+                DecisionActiveChanged?.Invoke(this, true);
 
                 // Freeze gameplay input + cursor
                 if (movementToDisable) movementToDisable.enabled = false;
@@ -159,7 +170,7 @@ namespace DialogueSystem
             if (_active == null && sequence != null) Trigger();
         }
 
-        // Public API: called by other scripts (e.g., trigger volumes)
+        // Public API
         public void Trigger() => Play(sequence);
 
         public void Play(DialogueSequenceSO seq)
@@ -167,8 +178,9 @@ namespace DialogueSystem
             if (seq == null) return;
             _active = seq;
             _index = -1;
-            _pendingDecision = false;
+            _isTyping = false;
             _awaitingDecision = false;
+            _pendingDecision = false;
             OnSequenceStart?.Invoke();
             NextLine();
         }
@@ -176,11 +188,19 @@ namespace DialogueSystem
         public void Stop()
         {
             StopAllCoroutines();
+
+            // If this player was holding a decision panel, clear the global count.
+            if (_awaitingDecision)
+            {
+                _awaitingDecision = false;
+                if (_activeDecisionCount > 0) _activeDecisionCount--;
+                DecisionActiveChanged?.Invoke(this, false);
+            }
+
             _active = null;
             _isTyping = false;
-            _awaitingDecision = false;
             _pendingDecision = false;
-            HideAllUI();                 // only hides THIS player's UI
+            HideAllUI();
             OnSequenceEnd?.Invoke();
         }
 
@@ -207,10 +227,12 @@ namespace DialogueSystem
             _isTyping = false;
             _awaitingDecision = false;
             _pendingDecision = false;
-            _pendingDecisionLine = null;
             _currentTMP = null;
             _currentSpeakerSource = null;
-            HideAllUI();
+
+            // Hide previous UI for THIS player only
+            if (_bubble) _bubble.SetVisible(false);
+            if (_omni) _omni.SetVisible(false);
 
             SpeakerSource speaker = null;
             bool hasSpeaker = !string.IsNullOrWhiteSpace(line.speakerKey) &&
@@ -240,14 +262,14 @@ namespace DialogueSystem
             // Typewriter start
             _fullText = line.text;
             _cps = Mathf.Max(1f, line.charsPerSecond);
+            _blipEventRef = line.blipEvent;
             StartCoroutine(TypewriterRoutine(line));
 
-            // Voice one-shot via your AudioManager
+            // Voice one-shot via AudioManager
             if (AudioManager.instance != null && !line.voiceEvent.IsNull)
             {
-                Vector3 pos = (_currentSpeakerSource != null)
-                              ? _currentSpeakerSource.AnchorPosition
-                              : (playerCamera ? playerCamera.transform.position : transform.position);
+                Vector3 pos = (_currentSpeakerSource != null) ? _currentSpeakerSource.AnchorPosition
+                                                             : (playerCamera ? playerCamera.transform.position : transform.position);
                 AudioManager.instance.PlayOneShot(line.voiceEvent, pos);
             }
         }
@@ -286,9 +308,8 @@ namespace DialogueSystem
         {
             if (line.doesTriggerDecision && _decision != null)
             {
-                // Arm the decision; user must press Interact again to open it
+                // DO NOT show the panel yet; wait for the next Interact press
                 _pendingDecision = true;
-                _pendingDecisionLine = line;
                 yield break;
             }
 
@@ -310,7 +331,13 @@ namespace DialogueSystem
             }
             if (movementToDisable) movementToDisable.enabled = true;
 
-            _awaitingDecision = false;
+            if (_awaitingDecision)
+            {
+                _awaitingDecision = false;
+                if (_activeDecisionCount > 0) _activeDecisionCount--;
+                DecisionActiveChanged?.Invoke(this, false);
+            }
+
             OnDecision?.Invoke(_active != null ? _active.sequenceId : string.Empty, takeLife);
             NextLine();
         }
@@ -318,7 +345,8 @@ namespace DialogueSystem
         private void SkipTypewriter()
         {
             _isTyping = false;
-            if (_currentTMP != null) _currentTMP.maxVisibleCharacters = int.MaxValue;
+            if (_currentTMP != null)
+                _currentTMP.maxVisibleCharacters = int.MaxValue;
         }
 
         private void CacheSpeakers()
@@ -326,13 +354,10 @@ namespace DialogueSystem
             _speakers.Clear();
             var found = FindObjectsByType<SpeakerSource>(FindObjectsSortMode.None);
             foreach (var s in found)
-            {
                 if (!string.IsNullOrEmpty(s.speakerKey) && !_speakers.ContainsKey(s.speakerKey))
                     _speakers.Add(s.speakerKey, s);
-            }
         }
 
-        // Call if you spawn speakers at runtime before playing
         public void RebuildSpeakerMap() => CacheSpeakers();
     }
 }
