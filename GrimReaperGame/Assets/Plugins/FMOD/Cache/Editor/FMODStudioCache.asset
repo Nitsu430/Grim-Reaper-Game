@@ -20,6 +20,53 @@ MonoBehaviour:
   - Name: Desktop
     Value: 770
   Exists: 1
+--- !u!114 &-6291674928582579541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Footsteps
+  m_EditorClassIdentifier: 
+  Path: event:/Footsteps
+  Guid:
+    Data1: -163467220
+    Data2: 1224592226
+    Data3: 671503264
+    Data4: -2049959138
+  Banks:
+  - {fileID: 3039891517227695434}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 160
+--- !u!114 &-5719457711810035195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/SFX.bank
+  m_EditorClassIdentifier: 
+  Path: ../JamsepticeyeFMOD/JamsepticeyeFMOD/Build/Desktop/SFX.bank
+  Name: SFX
+  StudioPath: bank:/SFX
+  lastModified: 638950399006798720
+  FileSizes:
+  - Name: Desktop
+    Value: 36256
+  Exists: 1
 --- !u!114 &-5558623999909311056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,6 +114,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-4666838380654812817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: ../JamsepticeyeFMOD/JamsepticeyeFMOD/Build/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 638950399006723449
+  FileSizes:
+  - Name: Desktop
+    Value: 1524
+  Exists: 1
 --- !u!114 &-4481829705332275503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,6 +154,53 @@ MonoBehaviour:
   - Name: Desktop
     Value: 506
   Exists: 1
+--- !u!114 &-4155272943557863796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Music.bank
+  m_EditorClassIdentifier: 
+  Path: ../JamsepticeyeFMOD/JamsepticeyeFMOD/Build/Desktop/Music.bank
+  Name: Music
+  StudioPath: bank:/Music
+  lastModified: 638950399006773973
+  FileSizes:
+  - Name: Desktop
+    Value: 506
+  Exists: 1
+--- !u!114 &-3549325913332910881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/TestingNPC2
+  m_EditorClassIdentifier: 
+  Path: event:/TestingNPC2
+  Guid:
+    Data1: -2058425069
+    Data2: 1250306696
+    Data3: -1306915393
+    Data4: -1923605337
+  Banks:
+  - {fileID: -5719457711810035195}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-3423724677145989036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,6 +221,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1074
   Exists: 1
+--- !u!114 &-3402373213117370085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/TextboxBlipOpen
+  m_EditorClassIdentifier: 
+  Path: event:/TextboxBlipOpen
+  Guid:
+    Data1: 1929436604
+    Data2: 1318923483
+    Data3: -81653592
+    Data4: 1287625574
+  Banks:
+  - {fileID: -5719457711810035195}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-2672148880844001300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,25 +308,25 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: -1559987677783757235}
-  - {fileID: 2913857932886765284}
-  - {fileID: 9165880183844558520}
-  - {fileID: -4481829705332275503}
-  - {fileID: 7358000604088625651}
+  - {fileID: 2490499350280461634}
+  - {fileID: 3039891517227695434}
+  - {fileID: -4666838380654812817}
+  - {fileID: -4155272943557863796}
+  - {fileID: -5719457711810035195}
   EditorEvents:
-  - {fileID: 7706567815312407028}
-  - {fileID: 8159593871876895696}
-  - {fileID: -5519319851915999988}
-  - {fileID: 6109554814547444046}
-  - {fileID: 5002488564419859233}
-  - {fileID: 8446839181704309092}
+  - {fileID: -6291674928582579541}
+  - {fileID: 4659016066269051714}
+  - {fileID: 5568986121256268427}
+  - {fileID: -3549325913332910881}
+  - {fileID: -3402373213117370085}
+  - {fileID: 869034302806413995}
   EditorParameters: []
   MasterBanks:
-  - {fileID: 2913857932886765284}
+  - {fileID: -4666838380654812817}
   StringsBanks:
-  - {fileID: -1559987677783757235}
+  - {fileID: 2490499350280461634}
   cacheVersion: 131849
-  cacheTime: 638950104493075218
+  cacheTime: 638950399006798720
   SerializableEventsDict:
   - key: event:/Footsteps
     index: 0
@@ -219,6 +360,53 @@ MonoBehaviour:
   - Name: Desktop
     Value: 776
   Exists: 1
+--- !u!114 &869034302806413995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/TextboxBlipClose
+  m_EditorClassIdentifier: 
+  Path: event:/TextboxBlipClose
+  Guid:
+    Data1: 45661400
+    Data2: 1079883094
+    Data3: 19842946
+    Data4: 871494680
+  Banks:
+  - {fileID: -5719457711810035195}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &2490499350280461634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: ../JamsepticeyeFMOD/JamsepticeyeFMOD/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638950399006748497
+  FileSizes:
+  - Name: Desktop
+    Value: 1262
+  Exists: 1
 --- !u!114 &2913857932886765284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,6 +427,53 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1524
   Exists: 1
+--- !u!114 &3039891517227695434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Ambience.bank
+  m_EditorClassIdentifier: 
+  Path: ../JamsepticeyeFMOD/JamsepticeyeFMOD/Build/Desktop/Ambience.bank
+  Name: Ambience
+  StudioPath: bank:/Ambience
+  lastModified: 638950399006682596
+  FileSizes:
+  - Name: Desktop
+    Value: 787584
+  Exists: 1
+--- !u!114 &4659016066269051714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambience
+  m_EditorClassIdentifier: 
+  Path: event:/Ambience
+  Guid:
+    Data1: -171293266
+    Data2: 1286110518
+    Data3: -252460625
+    Data4: -494671977
+  Banks:
+  - {fileID: 3039891517227695434}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 112258
 --- !u!114 &5002488564419859233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,6 +496,33 @@ MonoBehaviour:
   - {fileID: 7358000604088625651}
   IsStream: 0
   Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &5568986121256268427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/TestingNPC1
+  m_EditorClassIdentifier: 
+  Path: event:/TestingNPC1
+  Guid:
+    Data1: 642443528
+    Data2: 1168370142
+    Data3: 833556107
+    Data4: 1853626117
+  Banks:
+  - {fileID: -5719457711810035195}
+  IsStream: 0
+  Is3D: 1
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
